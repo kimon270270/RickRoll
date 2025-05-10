@@ -2,6 +2,7 @@ import tkinter as tk
 import os
 import stepic
 from PIL import Image, ImageTk
+import requests
 
 def resize_image_to_fit(img, max_width, max_height):
     width, height = img.size
@@ -13,7 +14,14 @@ def on_continue():
     
     root.destroy()
     
-     # Path to the image
+    # Download the image from the URL
+    url = "https://raw.githubusercontent.com/kimon270270/RickRoll/main/innocent_CAT.png"
+    response = requests.get(url)
+    
+    with open("innocent_CAT.png", "wb") as f:
+        f.write(response.content)
+                
+    # Path to the image
     image_path = "innocent_CAT.png"
     
     cat_root = tk.Tk()
@@ -55,20 +63,35 @@ def on_continue():
         print(f"Error: {e}")
         
 
+url_cat = "https://raw.githubusercontent.com/kimon270270/RickRoll/main/cat1.png"
+response = requests.get(url_cat)
+
+image_path = "cat1.png"
+
+with open(image_path, "wb") as f:
+    f.write(response.content)
+      
 root = tk.Tk()
 
 root.geometry("450x600")
 root.title("Image Enhancer")
 
-root.config(background="#afa5a2")
 
-label = tk.Label(root, text="IMAGE ENHANCER!!!", font=("Comic Sans MS", 25), background="#afa5a2")
-label.pack(pady=(160,50))
+bg = ImageTk.PhotoImage(file=image_path)
 
-button = tk.Button(root, text="CONTINUE", command= on_continue,font=("Comic Sans MS", 35), background="#1ffe00", fg= "white")
-button.pack()
+img = Image.open(image_path)
+resized_img = resize_image_to_fit(img, 450, 600)
+tk_img = ImageTk.PhotoImage(resized_img)
 
-label1 = tk.Label(root, text="Click Continue To Add Enhance Your Image", font=("Comic Sans MS", 12), background="#afa5a2")
+
+label = tk.Label(root, image=tk_img)
+label.place(x=0, y=0, relwidth=1, relheight=1)
+
+label1 = tk.Label(root, text="Click Continue To Enhance The Image", font=("Comic Sans MS", 18),)
 label1.pack(pady=(20,0))
+
+button = tk.Button(root, text="CONTINUE", command= on_continue,font=("Comic Sans MS", 35), background="#007BFF", fg= "white")
+button.pack(pady=(410,0))
+
 
 root.mainloop()
